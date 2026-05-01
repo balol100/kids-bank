@@ -560,6 +560,56 @@ html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
   animation: none !important; transition: none !important;
 }
 
+/* Kid mode */
+.kid-banner {
+  display: none;
+  background: linear-gradient(135deg, var(--purple), #A78BFA);
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  font-weight: 700; font-size: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.2);
+  box-shadow: 0 6px 18px rgba(139,92,246,.25);
+}
+body.kid-mode .kid-banner { display: block; }
+body.kid-mode .kid-hide { display: none !important; }
+
+.pin-divider {
+  display: flex; align-items: center;
+  color: var(--text-mute); font-size: 13px;
+  margin: 22px 0 14px; gap: 10px;
+}
+.pin-divider::before,
+.pin-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+
+.kid-picker-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.kid-picker-card {
+  background: linear-gradient(135deg, var(--card), var(--card-2));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px; cursor: pointer;
+  transition: var(--t); text-align: center;
+  position: relative; overflow: hidden;
+}
+.kid-picker-card::before {
+  content: ''; position: absolute; inset: -2px; border-radius: 24px;
+  background: linear-gradient(135deg, var(--c, var(--gold)), transparent 65%);
+  z-index: -1; opacity: .35;
+}
+.kid-picker-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+.kid-picker-card .avatar {
+  width: 80px; height: 80px;
+  font-size: 44px;
+  margin: 0 auto 12px;
+}
+.kid-picker-card h3 { margin: 0 0 4px; font-size: 22px; font-weight: 800; }
+.kid-picker-card .balance-value { font-family: var(--font-num); font-size: 26px; color: var(--c, var(--gold)); margin-top: 4px; }
+
 /* small screens */
 @media (max-width: 600px) {
   .summary { grid-template-columns: 1fr 1fr; }
@@ -588,6 +638,10 @@ html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
       <button class="icon-btn" id="logout-btn" title="התנתקות" aria-label="התנתקות" style="display:none;">🚪</button>
     </div>
   </header>
+
+  <div class="kid-banner" id="kid-banner" role="status" aria-live="polite">
+    מצב צפייה 👀 <span id="kid-banner-name"></span>
+  </div>
 
   <main class="main">
 
@@ -624,7 +678,27 @@ html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
             <button class="pin-key action ok" data-act="ok" id="pin-ok-btn">אישור</button>
           </div>
           <div class="pin-error" id="pin-error" aria-live="polite"></div>
+
+          <div id="kid-login-section" class="hidden">
+            <div class="pin-divider">או</div>
+            <button class="btn block" id="kid-login-btn">👦👧 כניסה לילד/ה</button>
+            <div class="tiny muted" style="margin-top:8px;">צפייה בלבד · ללא קוד סודי</div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ===== Kid picker ===== -->
+    <section class="screen" id="screen-kid-picker">
+      <div class="container">
+        <div class="row between">
+          <div>
+            <div class="dash-greeting">משפחת <span id="kid-family-name">—</span></div>
+            <p class="dash-sub">בחר/י את שמך כדי לראות את החשבון שלך</p>
+          </div>
+          <button class="btn ghost" id="kid-back-to-login-btn">→ יציאה</button>
+        </div>
+        <div id="kid-picker-area"></div>
       </div>
     </section>
 
@@ -636,7 +710,7 @@ html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
             <div class="dash-greeting" id="greet-name">משפחת —</div>
             <p class="dash-sub">היי! מה רוצים לעשות היום?</p>
           </div>
-          <button class="btn primary" id="add-child-btn">➕ הוסף ילד</button>
+          <button class="btn primary kid-hide" id="add-child-btn">➕ הוסף ילד</button>
         </div>
 
         <div class="summary">
@@ -656,10 +730,10 @@ html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
         <div class="child-hero" id="child-hero"></div>
 
         <div class="action-row">
-          <button class="btn success" id="add-deposit-btn">➕ הכנסה</button>
-          <button class="btn danger" id="add-withdrawal-btn">➖ הוצאה</button>
+          <button class="btn success kid-hide" id="add-deposit-btn">➕ הכנסה</button>
+          <button class="btn danger kid-hide" id="add-withdrawal-btn">➖ הוצאה</button>
           <button class="btn ghost" id="balance-at-date-btn">📅 יתרה לתאריך</button>
-          <button class="btn ghost" id="child-history-btn">📜 היסטוריה</button>
+          <button class="btn ghost kid-hide" id="child-history-btn">📜 היסטוריה</button>
         </div>
 
         <div class="section-h"><h2>תנועות אחרונות</h2></div>
@@ -824,8 +898,11 @@ const state = {
   currentScreen: 'pin',
   pinInput: '',
   pinMode: 'login',
+  kidMode: false,
   filters: { from: '', to: '', child: '', type: '', category: '' },
 };
+
+const FAMILY_LS_KEY = 'kb_family_id';
 
 // -------------------- DOM helpers --------------------
 const $ = (s, r = document) => r.querySelector(s);
@@ -992,10 +1069,13 @@ function showScreen(name) {
   if (target) target.classList.add('active');
   // Topbar buttons
   const inApp = name !== 'pin';
-  $('#settings-btn').style.display = inApp ? '' : 'none';
-  $('#history-btn').style.display = inApp ? '' : 'none';
+  const isKidPicker = name === 'kid-picker';
+  $('#settings-btn').style.display = (inApp && !state.kidMode) ? '' : 'none';
+  $('#history-btn').style.display = (inApp && !state.kidMode) ? '' : 'none';
   $('#logout-btn').style.display = inApp ? '' : 'none';
-  $('#back-btn').style.display = (name === 'child' || name === 'history' || name === 'settings') ? '' : 'none';
+  $('#back-btn').style.display = (
+    !isKidPicker && (name === 'child' || name === 'history' || name === 'settings')
+  ) ? '' : 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1050,6 +1130,9 @@ function setupPinScreen() {
   });
 
   $('#family-name-input').addEventListener('input', () => setPinError(''));
+
+  $('#kid-login-btn').addEventListener('click', startKidLogin);
+  $('#kid-back-to-login-btn').addEventListener('click', exitKidMode);
 }
 
 async function onPinSubmit() {
@@ -1069,6 +1152,9 @@ async function onPinSubmit() {
     }
     state.family = fam;
     sessionStorage.setItem('family_id', fam.id);
+    localStorage.setItem(FAMILY_LS_KEY, fam.id);
+    state.kidMode = false;
+    document.body.classList.remove('kid-mode');
     state.pinInput = ''; refreshPinDots();
     $('#family-name-input').value = '';
     await enterApp();
@@ -1086,6 +1172,161 @@ async function enterApp() {
   await Promise.all([loadChildren(), loadCategories()]);
   await renderDashboard();
   showScreen('dashboard');
+}
+
+// -------------------- Kid mode --------------------
+function updateKidLoginVisibility() {
+  const has = !!localStorage.getItem(FAMILY_LS_KEY);
+  $('#kid-login-section').classList.toggle('hidden', !has);
+}
+
+async function startKidLogin() {
+  const fid = localStorage.getItem(FAMILY_LS_KEY);
+  if (!fid) {
+    setPinError('הורה צריך/ה להתחבר תחילה');
+    return;
+  }
+  setPinError('');
+  $('#kid-login-btn').disabled = true;
+  try {
+    const fam = await loadFamily(fid);
+    if (!fam) {
+      localStorage.removeItem(FAMILY_LS_KEY);
+      updateKidLoginVisibility();
+      setPinError('המשפחה לא נמצאה. בקש/י מההורה להתחבר תחילה');
+      return;
+    }
+    state.family = fam;
+    state.kidMode = true;
+    document.body.classList.add('kid-mode');
+    $('#brand-sub').textContent = 'משפחת ' + fam.family_name;
+    await Promise.all([loadChildren(), loadCategories()]);
+    await renderKidPicker();
+    showScreen('kid-picker');
+  } catch (e) {
+    setPinError(e.message || 'שגיאה');
+  } finally {
+    $('#kid-login-btn').disabled = false;
+  }
+}
+
+async function renderKidPicker() {
+  $('#kid-family-name').textContent = state.family.family_name;
+  $('#kid-banner-name').textContent = '';
+  const area = $('#kid-picker-area');
+  area.innerHTML = '<div class="spinner"></div>';
+
+  const enc = encodeURIComponent;
+  const allTx = await api('GET',
+    'transactions?family_id=eq.' + enc(state.family.id) + '&select=child_id,type,amount&limit=10000'
+  );
+  const byChild = {};
+  (allTx || []).forEach((t) => {
+    const a = Number(t.amount) || 0;
+    byChild[t.child_id] = (byChild[t.child_id] || 0) + (t.type === 'deposit' ? a : -a);
+  });
+
+  area.innerHTML = '';
+  if (!state.children.length) {
+    area.appendChild(el('div', { class: 'empty' },
+      el('div', { class: 'big' }, '👶'),
+      el('div', {}, 'עוד אין ילדים במשפחה'),
+      el('div', { class: 'tiny', style: { marginTop: '6px' } }, 'בקש/י מההורה להוסיף אותך')
+    ));
+    return;
+  }
+
+  const grid = el('div', { class: 'kid-picker-grid' });
+  state.children.forEach((c) => {
+    const bal = byChild[c.id] || 0;
+    const card = el('div', {
+      class: 'kid-picker-card',
+      style: { '--c': c.color || '#F59E0B' },
+      onclick: () => openKidView(c.id),
+    },
+      el('div', { class: 'avatar', style: { '--c': c.color || '#F59E0B', border: '3px solid ' + (c.color || '#F59E0B') } }, c.avatar_emoji || '👦'),
+      el('h3', {}, c.name),
+      el('div', { class: 'balance-label' }, 'יתרה'),
+      el('div', { class: 'balance-value', style: { '--c': c.color || '#F59E0B' } }, fmtMoney(bal))
+    );
+    grid.appendChild(card);
+  });
+  area.appendChild(grid);
+}
+
+async function openKidView(childId) {
+  state.currentChildId = childId;
+  const c = state.children.find((x) => x.id === childId);
+  if (c) $('#kid-banner-name').textContent = '· ' + (c.avatar_emoji || '') + ' ' + c.name;
+  showScreen('child');
+  await renderChildDetail();
+}
+
+function exitKidMode() {
+  state.kidMode = false;
+  state.family = null;
+  state.children = [];
+  state.categories = [];
+  state.currentChildId = null;
+  document.body.classList.remove('kid-mode');
+  $('#kid-banner-name').textContent = '';
+  showScreen('pin');
+  updateKidLoginVisibility();
+}
+
+// PIN gate for sensitive actions (delete tx, etc.)
+function requirePin(actionLabel, onSuccess) {
+  let pin = '';
+  const maxLen = 6;
+
+  const dotsEl = el('div', { class: 'pin-dots' });
+  for (let i = 0; i < 6; i++) dotsEl.appendChild(el('div', { class: 'pin-dot' }));
+  const refreshDots = () => {
+    Array.from(dotsEl.children).forEach((d, i) => d.classList.toggle('filled', i < pin.length));
+  };
+
+  const errorEl = el('div', { class: 'pin-error', style: { textAlign: 'center' } });
+
+  const padKey = (label, onClick, classes = '') => el('button', {
+    type: 'button',
+    class: 'pin-key ' + classes,
+    onclick: onClick,
+  }, label);
+
+  const submit = () => {
+    if (pin === state.family.parent_pin) {
+      closeModal();
+      onSuccess();
+    } else {
+      errorEl.textContent = 'קוד שגוי';
+      pin = ''; refreshDots();
+    }
+  };
+
+  const pad = el('div', { class: 'pin-pad' });
+  for (let i = 1; i <= 9; i++) {
+    pad.appendChild(padKey(String(i), () => {
+      if (pin.length < maxLen) { pin += i; refreshDots(); errorEl.textContent = ''; }
+    }));
+  }
+  pad.appendChild(padKey('⌫', () => {
+    pin = pin.slice(0, -1); refreshDots(); errorEl.textContent = '';
+  }, 'action del'));
+  pad.appendChild(padKey('0', () => {
+    if (pin.length < maxLen) { pin += '0'; refreshDots(); errorEl.textContent = ''; }
+  }));
+  pad.appendChild(padKey('אישור', submit, 'action ok'));
+
+  const body = el('div', {},
+    el('div', { class: 'tiny muted', style: { textAlign: 'center', marginBottom: '4px' } },
+      actionLabel + ' — הזיני את קוד ההורה'),
+    dotsEl,
+    pad,
+    errorEl
+  );
+
+  const footer = [el('button', { class: 'btn ghost block', onclick: closeModal }, 'ביטול')];
+  openModal(modalShell('🔒 אישור פעולה', body, footer));
 }
 
 // -------------------- Dashboard --------------------
@@ -1155,7 +1396,7 @@ async function openChildDetail(childId) {
 
 async function renderChildDetail() {
   const c = state.children.find((x) => x.id === state.currentChildId);
-  if (!c) return showScreen('dashboard');
+  if (!c) return showScreen(state.kidMode ? 'kid-picker' : 'dashboard');
 
   const hero = $('#child-hero');
   hero.innerHTML = '';
@@ -1163,14 +1404,22 @@ async function renderChildDetail() {
   hero.appendChild(el('div', { class: 'avatar', style: { '--c': c.color, width: '72px', height: '72px', fontSize: '38px' } }, c.avatar_emoji));
   hero.appendChild(el('div', { style: { flex: '1', minWidth: '0' } },
     el('h2', { class: 'child-name', style: { fontSize: '22px' } }, c.name),
-    el('div', { class: 'tiny' }, 'הקישו על "ערוך" לעדכון פרטי הילד/ה')
+    el('div', { class: 'tiny' }, state.kidMode ? 'החשבון שלי' : 'הקישו על "ערוך" לעדכון פרטי הילד/ה')
   ));
   hero.appendChild(el('div', { style: { textAlign: 'left' } },
     el('div', { class: 'balance-label' }, 'יתרה נוכחית'),
     balPlaceholder
   ));
-  hero.appendChild(el('button', { class: 'btn ghost sm', onclick: () => openEditChild(c) }, '✏️ ערוך'));
-  hero.appendChild(el('button', { class: 'btn ghost sm', onclick: () => confirmDeleteChild(c) }, '🗑️ מחק'));
+  if (!state.kidMode) {
+    hero.appendChild(el('button', { class: 'btn ghost sm', onclick: () => openEditChild(c) }, '✏️ ערוך'));
+    hero.appendChild(el('button', { class: 'btn ghost sm', onclick: () => confirmDeleteChild(c) }, '🗑️ מחק'));
+  } else {
+    hero.appendChild(el('button', { class: 'btn ghost sm', onclick: async () => {
+      await renderKidPicker();
+      $('#kid-banner-name').textContent = '';
+      showScreen('kid-picker');
+    } }, '🔄 החלפת ילד/ה'));
+  }
 
   const bal = await getChildBalance(c.id);
   balPlaceholder.textContent = fmtMoney(bal);
@@ -1209,18 +1458,19 @@ function renderTxList(txs, withChildName) {
         )
       ),
       el('div', { class: 'tx-amount ' + t.type }, (isDep ? '+' : '−') + fmtMoney(t.amount)),
-      el('div', { class: 'tx-actions' },
+      state.kidMode ? null : el('div', { class: 'tx-actions' },
         el('button', {
           class: 'tx-del-btn', title: 'מחק',
-          onclick: async () => {
-            if (!confirm('למחוק תנועה זו?')) return;
-            try {
-              await deleteTransaction(t.id);
-              toast('התנועה נמחקה', 'success');
-              if (state.currentScreen === 'child') renderChildDetail();
-              else if (state.currentScreen === 'history') runFilters();
-              else renderDashboard();
-            } catch (e) { toast('שגיאה במחיקה', 'error'); }
+          onclick: () => {
+            requirePin('מחיקת תנועה: ' + t.description, async () => {
+              try {
+                await deleteTransaction(t.id);
+                toast('התנועה נמחקה', 'success');
+                if (state.currentScreen === 'child') renderChildDetail();
+                else if (state.currentScreen === 'history') runFilters();
+                else renderDashboard();
+              } catch (e) { toast('שגיאה במחיקה', 'error'); }
+            });
           },
         }, '×')
       )
@@ -1670,7 +1920,13 @@ function setupA11y() {
 
 // -------------------- Wire up --------------------
 function wireTopbar() {
-  $('#back-btn').addEventListener('click', () => {
+  $('#back-btn').addEventListener('click', async () => {
+    if (state.kidMode && state.currentScreen === 'child') {
+      await renderKidPicker();
+      $('#kid-banner-name').textContent = '';
+      showScreen('kid-picker');
+      return;
+    }
     if (state.currentScreen === 'child') showScreen('dashboard');
     else if (state.currentScreen === 'history') showScreen('dashboard');
     else if (state.currentScreen === 'settings') showScreen('dashboard');
@@ -1682,12 +1938,14 @@ function wireTopbar() {
     await runFilters();
   });
   $('#logout-btn').addEventListener('click', () => {
+    if (state.kidMode) { exitKidMode(); return; }
     if (!confirm('להתנתק?')) return;
     sessionStorage.removeItem('family_id');
     state.family = null;
     state.children = [];
     state.categories = [];
     showScreen('pin');
+    updateKidLoginVisibility();
   });
   $('#modal-bg').addEventListener('click', (e) => { if (e.target.id === 'modal-bg') closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
@@ -1757,12 +2015,15 @@ async function init() {
     panel.classList.remove('open');
   });
 
+  updateKidLoginVisibility();
+
   const fid = sessionStorage.getItem('family_id');
   if (fid) {
     try {
       const fam = await loadFamily(fid);
       if (fam) {
         state.family = fam;
+        localStorage.setItem(FAMILY_LS_KEY, fam.id);
         await enterApp();
         return;
       }
