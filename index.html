@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0F172A" />
+<meta name="description" content="בנק הילדים — אפליקציה לניהול חיסכון, הוצאות והכנסות לילדים. כלי חינוכי פיננסי בעברית עם תמיכה מלאה בנגישות." />
+<meta name="keywords" content="בנק הילדים, חינוך פיננסי, חיסכון לילדים, דמי כיס, ניהול כסף, אפליקציה לילדים" />
+<meta name="author" content="lior_Ai" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="he_IL" />
+<meta property="og:title" content="בנק הילדים — חינוך פיננסי לילדים" />
+<meta property="og:description" content="ניהול חיסכון, דמי כיס והוצאות לכל ילד במשפחה. גרפים, קטגוריות וחישוב יתרה לכל תאריך." />
+<meta property="og:site_name" content="בנק הילדים" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="בנק הילדים" />
+<meta name="twitter:description" content="חינוך פיננסי לילדים — אפליקציה חינמית בעברית" />
+<title>בנק הילדים — חינוך פיננסי לילדים</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E🏦%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Rubik+Mono+One&display=swap" rel="stylesheet" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "בנק הילדים",
+  "alternateName": "Kids Bank",
+  "description": "אפליקציה לניהול חיסכון, הוצאות והכנסות לילדים — כלי חינוכי פיננסי בעברית.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "he-IL",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "ILS" },
+  "author": { "@type": "Person", "name": "lior_Ai", "url": "https://lior-ai.com" },
+  "publisher": { "@type": "Organization", "name": "lior_Ai", "url": "https://lior-ai.com" }
+}
+</script>
+<style>
+:root {
+  --bg: #0F172A;
+  --bg-2: #0B1225;
+  --card: #1E293B;
+  --card-2: #273449;
+  --line: #334155;
+  --text: #E2E8F0;
+  --text-soft: #94A3B8;
+  --text-mute: #64748B;
+  --gold: #F59E0B;
+  --green: #10B981;
+  --rose: #F43F5E;
+  --blue: #3B82F6;
+  --purple: #8B5CF6;
+  --pink: #EC4899;
+  --teal: #14B8A6;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  --font-base: 'Heebo', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-num: 'Rubik Mono One', 'Heebo', sans-serif;
+  --t: 220ms cubic-bezier(.2, .9, .25, 1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: var(--font-base);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100dvh;
+  position: relative;
+  direction: rtl;
+}
+
+/* Animated gradient mesh background */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(245, 158, 11, .14), transparent 45%),
+    radial-gradient(circle at 82% 14%, rgba(139, 92, 246, .12), transparent 45%),
+    radial-gradient(circle at 78% 88%, rgba(16, 185, 129, .12), transparent 45%),
+    radial-gradient(circle at 12% 86%, rgba(244, 63, 94, .10), transparent 45%),
+    var(--bg);
+  animation: meshShift 22s ease-in-out infinite alternate;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse at top, transparent 30%, rgba(0,0,0,.45) 100%);
+}
+@keyframes meshShift {
+  0% { transform: translate3d(0,0,0) scale(1); }
+  100% { transform: translate3d(-2%, -1%, 0) scale(1.05); }
+}
+
+/* Common */
+.app { min-height: 100dvh; display: flex; flex-direction: column; }
+.container { width: 100%; max-width: 980px; margin: 0 auto; padding: 16px; }
+.row { display: flex; gap: 12px; align-items: center; }
+.row.between { justify-content: space-between; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.spacer { flex: 1; }
+.hidden { display: none !important; }
+.muted { color: var(--text-soft); }
+.tiny { font-size: 12px; color: var(--text-mute); }
+.center { text-align: center; }
+
+/* Header */
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(15, 23, 42, .8), rgba(15, 23, 42, .65));
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  max-width: 980px; margin: 0 auto;
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
+.brand .logo {
+  width: 36px; height: 36px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold), #FBBF24);
+  display: grid; place-items: center;
+  font-size: 22px; box-shadow: 0 6px 18px rgba(245,158,11,.35);
+}
+.brand small { display: block; font-size: 11px; color: var(--text-soft); font-weight: 500; }
+
+.icon-btn {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  background: var(--card); color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer; transition: var(--t);
+  font-size: 18px;
+}
+.icon-btn:hover { background: var(--card-2); transform: translateY(-1px); }
+.icon-btn[aria-pressed="true"] { background: var(--gold); color: #1A1A1A; border-color: var(--gold); }
+
+/* Main */
+.main { flex: 1; padding-bottom: 80px; }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  transition: var(--t);
+}
+.card.flat { box-shadow: none; }
+
+/* Buttons */
+.btn {
+  appearance: none; -webkit-appearance: none;
+  background: var(--card-2); color: var(--text);
+  border: 1px solid var(--line);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: var(--t);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn.primary { background: linear-gradient(135deg, var(--gold), #FBBF24); color: #111; border-color: transparent; }
+.btn.success { background: linear-gradient(135deg, var(--green), #34D399); color: #052E1F; border-color: transparent; }
+.btn.danger  { background: linear-gradient(135deg, var(--rose), #FB7185); color: #4B0510; border-color: transparent; }
+.btn.ghost   { background: transparent; }
+.btn.block   { width: 100%; }
+.btn.sm      { min-height: 36px; padding: 8px 12px; font-size: 13px; }
+
+/* Inputs */
+.input, .select, textarea.input {
+  width: 100%;
+  background: var(--bg-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: inherit; font-size: 15px;
+  transition: var(--t);
+  outline: none;
+  text-align: right;
+}
+textarea.input { min-height: 80px; resize: vertical; }
+.input:focus, .select:focus, textarea.input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(245,158,11,.16);
+}
+.label { display: block; font-size: 13px; color: var(--text-soft); margin-bottom: 6px; font-weight: 500; }
+.field { margin-bottom: 14px; }
+
+/* Screens */
+.screen { display: none; animation: fadeIn .35s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* PIN screen */
+.pin-wrap { min-height: calc(100dvh - 80px); display: grid; place-items: center; padding: 20px; }
+.pin-card {
+  width: 100%; max-width: 420px;
+  background: linear-gradient(180deg, var(--card), var(--card-2));
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.45);
+  text-align: center;
+}
+.pin-title { font-size: 26px; font-weight: 800; margin: 0 0 4px; }
+.pin-sub { color: var(--text-soft); margin: 0 0 22px; font-size: 14px; }
+.pin-dots { display: flex; gap: 12px; justify-content: center; margin: 14px 0 22px; }
+.pin-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: transparent; border: 2px solid var(--line);
+  transition: var(--t);
+}
+.pin-dot.filled { background: var(--gold); border-color: var(--gold); transform: scale(1.1); }
+.pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 320px; margin: 0 auto; }
+.pin-key {
+  appearance: none; border: 1px solid var(--line);
+  background: var(--bg-2); color: var(--text);
+  height: 56px; border-radius: 14px;
+  font-size: 22px; font-weight: 700; font-family: var(--font-num);
+  cursor: pointer; transition: var(--t);
+  display: grid; place-items: center;
+}
+.pin-key:hover { background: var(--card-2); transform: translateY(-1px); }
+.pin-key.action { background: var(--card); font-family: inherit; font-size: 16px; }
+.pin-key.action.ok { background: linear-gradient(135deg, var(--gold), #FBBF24); color: #111; border-color: transparent; }
+.pin-key.action.del { background: var(--card); color: var(--rose); }
+.pin-tabs { display: flex; gap: 8px; background: var(--bg-2); border: 1px solid var(--line); padding: 4px; border-radius: 14px; margin-bottom: 18px; }
+.pin-tab {
+  flex: 1; padding: 10px; border-radius: 10px;
+  cursor: pointer; font-weight: 600; transition: var(--t);
+  background: transparent; color: var(--text-soft); border: 0;
+  font-family: inherit; font-size: 14px;
+}
+.pin-tab.active { background: var(--card); color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,.2); }
+.pin-error { color: var(--rose); font-size: 13px; min-height: 18px; margin-top: 8px; font-weight: 600; }
+
+/* Dashboard */
+.dash-greeting { font-size: 22px; font-weight: 800; margin: 4px 0 4px; }
+.dash-sub { color: var(--text-soft); margin: 0 0 18px; }
+.summary {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  margin-bottom: 18px;
+}
+.summary .stat {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 14px;
+}
+.summary .stat .label { font-size: 12px; color: var(--text-soft); margin-bottom: 4px; }
+.summary .stat .value { font-family: var(--font-num); font-size: 22px; }
+.summary .stat.green .value { color: var(--green); }
+.summary .stat.rose .value { color: var(--rose); }
+.summary .stat.gold .value { color: var(--gold); }
+
+.children-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.child-card {
+  background: linear-gradient(135deg, var(--card), var(--card-2));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  cursor: pointer; transition: var(--t);
+  position: relative;
+  overflow: hidden;
+}
+.child-card::before {
+  content: ''; position: absolute; inset: -2px; border-radius: 24px;
+  background: linear-gradient(135deg, var(--c, var(--gold)), transparent 65%);
+  z-index: -1; opacity: .35;
+}
+.child-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+.child-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.avatar {
+  width: 56px; height: 56px; border-radius: 18px;
+  display: grid; place-items: center;
+  font-size: 30px;
+  background: rgba(255,255,255,.06);
+  border: 2px solid var(--c, var(--gold));
+}
+.child-name { font-size: 18px; font-weight: 800; margin: 0; }
+.child-card .balance-box {
+  margin-top: 4px;
+  background: var(--bg-2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.balance-label { font-size: 12px; color: var(--text-soft); }
+.balance-value { font-family: var(--font-num); font-size: 26px; color: var(--c, var(--gold)); }
+
+.empty {
+  padding: 36px 20px; text-align: center;
+  border: 1px dashed var(--line); border-radius: var(--radius);
+  color: var(--text-soft);
+}
+.empty .big { font-size: 50px; margin-bottom: 6px; }
+
+/* Section header */
+.section-h { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 12px; }
+.section-h h2 { font-size: 18px; margin: 0; }
+
+/* Child detail */
+.child-hero {
+  background: linear-gradient(135deg, var(--card), var(--card-2));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.child-hero .avatar { width: 72px; height: 72px; font-size: 38px; }
+.child-hero .balance-value { font-size: 38px; }
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 16px; }
+
+/* Transaction list */
+.tx-list { display: flex; flex-direction: column; gap: 8px; }
+.tx-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: var(--t);
+}
+.tx-item:hover { background: var(--card-2); }
+.tx-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center;
+  font-size: 20px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.tx-icon.deposit { color: var(--green); border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.1); }
+.tx-icon.withdrawal { color: var(--rose); border-color: rgba(244,63,94,.4); background: rgba(244,63,94,.1); }
+.tx-body { flex: 1; min-width: 0; }
+.tx-desc { font-weight: 600; margin: 0 0 2px; }
+.tx-meta { font-size: 12px; color: var(--text-soft); }
+.tx-amount { font-family: var(--font-num); font-size: 18px; flex-shrink: 0; }
+.tx-amount.deposit { color: var(--green); }
+.tx-amount.withdrawal { color: var(--rose); }
+.tx-actions { display: flex; gap: 4px; }
+.tx-del-btn {
+  appearance: none; background: transparent; border: 0; color: var(--text-mute);
+  cursor: pointer; padding: 6px; font-size: 18px; transition: var(--t);
+  border-radius: 8px;
+}
+.tx-del-btn:hover { color: var(--rose); background: rgba(244,63,94,.12); }
+
+/* Modal */
+.modal-bg {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(8px);
+  display: grid; place-items: end center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 220ms ease;
+}
+.modal-bg.open { opacity: 1; pointer-events: auto; }
+.modal {
+  width: 100%; max-width: 540px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px 24px 0 0;
+  padding: 22px;
+  max-height: 90dvh; overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 280ms cubic-bezier(.2, .9, .25, 1);
+}
+.modal-bg.open .modal { transform: translateY(0); }
+@media (min-width: 720px) {
+  .modal-bg { place-items: center; }
+  .modal { border-radius: 24px; }
+}
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.modal-title { margin: 0; font-size: 20px; font-weight: 800; }
+.close-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--bg-2); border: 1px solid var(--line); color: var(--text);
+  cursor: pointer; font-size: 18px;
+}
+
+/* Toggle group (deposit/withdrawal) */
+.toggle-group {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 4px; margin-bottom: 14px;
+}
+.toggle-opt {
+  padding: 12px; border-radius: 10px; text-align: center;
+  cursor: pointer; font-weight: 700; transition: var(--t);
+  background: transparent; color: var(--text-soft); border: 0;
+  font-family: inherit;
+}
+.toggle-opt[aria-pressed="true"][data-type="deposit"] { background: linear-gradient(135deg, var(--green), #34D399); color: #052E1F; }
+.toggle-opt[aria-pressed="true"][data-type="withdrawal"] { background: linear-gradient(135deg, var(--rose), #FB7185); color: #4B0510; }
+
+/* Category picker */
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+.cat-btn {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 12px; padding: 12px 6px;
+  text-align: center; cursor: pointer; transition: var(--t);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: inherit; color: var(--text); font-size: 12px;
+}
+.cat-btn .ico { font-size: 24px; }
+.cat-btn:hover { background: var(--card); }
+.cat-btn.selected {
+  border-color: var(--gold);
+  background: rgba(245,158,11,.1);
+  box-shadow: 0 0 0 3px rgba(245,158,11,.15);
+}
+
+/* Emoji picker */
+.emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; max-height: 180px; overflow-y: auto; padding: 6px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; }
+.emoji-grid button {
+  background: transparent; border: 1px solid transparent; cursor: pointer;
+  font-size: 24px; padding: 4px; border-radius: 8px; transition: var(--t);
+}
+.emoji-grid button:hover { background: var(--card); }
+.emoji-grid button.selected { border-color: var(--gold); background: rgba(245,158,11,.12); }
+
+.color-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.color-swatch {
+  width: 36px; height: 36px; border-radius: 12px;
+  cursor: pointer; border: 3px solid transparent; transition: var(--t);
+}
+.color-swatch.selected { border-color: var(--text); transform: scale(1.1); }
+
+/* Amount input big */
+.amount-input {
+  width: 100%; text-align: center;
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px;
+  font-family: var(--font-num); font-size: 32px; color: var(--gold);
+  outline: none;
+}
+.amount-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(245,158,11,.16); }
+
+/* Filters */
+.filter-row {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin-bottom: 14px;
+}
+
+/* Floating buttons */
+.fab {
+  position: fixed; z-index: 40;
+  width: 56px; height: 56px; border-radius: 50%;
+  display: grid; place-items: center;
+  cursor: pointer; transition: var(--t);
+  box-shadow: 0 14px 30px rgba(0,0,0,.4);
+  border: 0; color: white; font-size: 24px;
+}
+.fab:hover { transform: translateY(-2px); }
+.fab.whatsapp { left: 16px; bottom: 16px; background: #25D366; }
+.fab.a11y { left: 16px; bottom: 84px; background: linear-gradient(135deg, var(--purple), #A78BFA); }
+
+/* Accessibility panel */
+.a11y-panel {
+  position: fixed; left: 16px; bottom: 84px; z-index: 41;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 18px; padding: 16px;
+  width: 300px; max-width: calc(100vw - 32px);
+  box-shadow: 0 30px 60px rgba(0,0,0,.5);
+  transform: translateY(20px); opacity: 0; pointer-events: none;
+  transition: var(--t);
+}
+.a11y-panel.open { transform: none; opacity: 1; pointer-events: auto; }
+.a11y-panel h3 { margin: 0 0 12px; font-size: 16px; }
+.a11y-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.a11y-btn {
+  background: var(--bg-2); border: 1px solid var(--line); color: var(--text);
+  padding: 8px 6px; border-radius: 10px; cursor: pointer;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  transition: var(--t); display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.a11y-btn .ico { font-size: 18px; }
+.a11y-btn:hover { background: var(--card-2); }
+.a11y-btn[aria-pressed="true"] { background: var(--gold); color: #111; border-color: transparent; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 24px 16px;
+  color: var(--text-soft); font-size: 13px;
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+}
+.footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+.footer a:hover { text-decoration: underline; }
+
+/* Toast */
+.toast-wrap { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 70; display: flex; flex-direction: column; gap: 6px; }
+.toast {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 12px; padding: 10px 14px;
+  box-shadow: var(--shadow); color: var(--text);
+  font-weight: 600; font-size: 14px;
+  animation: toastIn .2s ease;
+}
+.toast.success { border-color: rgba(16,185,129,.5); }
+.toast.error { border-color: rgba(244,63,94,.5); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; } }
+
+/* Loading */
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--line); border-top-color: var(--gold);
+  border-radius: 50%; animation: spin 0.9s linear infinite;
+  margin: 24px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Accessibility classes (Israeli Std 5568) */
+html.a11y-large-text { font-size: 18px; }
+html.a11y-larger-text { font-size: 22px; }
+html.a11y-readable-font, html.a11y-readable-font * { font-family: Arial, 'Heebo', sans-serif !important; }
+html.a11y-high-contrast { background: #000 !important; }
+html.a11y-high-contrast body { background: #000 !important; color: #FFF !important; }
+html.a11y-high-contrast .card, html.a11y-high-contrast .child-card,
+html.a11y-high-contrast .topbar, html.a11y-high-contrast .pin-card,
+html.a11y-high-contrast .modal { background: #000 !important; border-color: #FFF !important; }
+html.a11y-high-contrast .input, html.a11y-high-contrast .select,
+html.a11y-high-contrast textarea.input { background: #000 !important; color: #FFF !important; border-color: #FFF !important; }
+html.a11y-negative { filter: invert(1) hue-rotate(180deg); }
+html.a11y-light { background: #F8FAFC !important; }
+html.a11y-light body { background: #F8FAFC !important; color: #0F172A !important; }
+html.a11y-light .card, html.a11y-light .child-card,
+html.a11y-light .topbar, html.a11y-light .pin-card,
+html.a11y-light .modal { background: #FFF !important; border-color: #CBD5E1 !important; color: #0F172A !important; }
+html.a11y-light .input, html.a11y-light .select,
+html.a11y-light textarea.input { background: #FFF !important; color: #0F172A !important; border-color: #CBD5E1 !important; }
+html.a11y-light .muted, html.a11y-light .tx-meta,
+html.a11y-light .label, html.a11y-light .pin-sub { color: #475569 !important; }
+html.a11y-highlight-links a, html.a11y-highlight-links button { outline: 2px dashed var(--gold) !important; outline-offset: 2px; }
+html.a11y-underline-links a { text-decoration: underline !important; }
+html.a11y-highlight-headings h1, html.a11y-highlight-headings h2,
+html.a11y-highlight-headings h3, html.a11y-highlight-headings .pin-title,
+html.a11y-highlight-headings .modal-title { background: var(--gold) !important; color: #111 !important; padding: 2px 6px !important; border-radius: 6px !important; }
+html.a11y-grayscale { filter: grayscale(1); }
+html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
+  animation: none !important; transition: none !important;
+}
+
+/* small screens */
+@media (max-width: 600px) {
+  .summary { grid-template-columns: 1fr 1fr; }
+  .summary .stat:nth-child(3) { grid-column: span 2; }
+  .container { padding: 12px; }
+  .child-hero .balance-value { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <button class="icon-btn" id="back-btn" title="חזרה" aria-label="חזרה" style="display:none;">→</button>
+      <div class="brand">
+        <div class="logo">🏦</div>
+        <div>
+          <div>בנק הילדים</div>
+          <small id="brand-sub">חינוך פיננסי לילדים</small>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <button class="icon-btn" id="settings-btn" title="הגדרות" aria-label="הגדרות" style="display:none;">⚙️</button>
+      <button class="icon-btn" id="history-btn" title="היסטוריה" aria-label="היסטוריה" style="display:none;">📊</button>
+      <button class="icon-btn" id="logout-btn" title="התנתקות" aria-label="התנתקות" style="display:none;">🚪</button>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- ===== PIN screen ===== -->
+    <section class="screen active" id="screen-pin">
+      <div class="pin-wrap">
+        <div class="pin-card">
+          <div class="pin-tabs" role="tablist">
+            <button class="pin-tab active" data-mode="login" role="tab">התחברות</button>
+            <button class="pin-tab" data-mode="signup" role="tab">משפחה חדשה</button>
+          </div>
+          <h1 class="pin-title" id="pin-title">ברוכים הבאים</h1>
+          <p class="pin-sub" id="pin-sub">הזינו שם משפחה וקוד סודי</p>
+          <div class="field" style="text-align:right;">
+            <label class="label" for="family-name-input">שם המשפחה</label>
+            <input class="input" id="family-name-input" placeholder="לדוגמה: כהן" autocomplete="off" />
+          </div>
+          <div class="pin-dots" id="pin-dots" aria-label="תצוגת קוד">
+            <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+            <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+          </div>
+          <div class="pin-pad" id="pin-pad">
+            <button class="pin-key" data-d="1">1</button>
+            <button class="pin-key" data-d="2">2</button>
+            <button class="pin-key" data-d="3">3</button>
+            <button class="pin-key" data-d="4">4</button>
+            <button class="pin-key" data-d="5">5</button>
+            <button class="pin-key" data-d="6">6</button>
+            <button class="pin-key" data-d="7">7</button>
+            <button class="pin-key" data-d="8">8</button>
+            <button class="pin-key" data-d="9">9</button>
+            <button class="pin-key action del" data-act="del" aria-label="מחיקה">⌫</button>
+            <button class="pin-key" data-d="0">0</button>
+            <button class="pin-key action ok" data-act="ok" id="pin-ok-btn">אישור</button>
+          </div>
+          <div class="pin-error" id="pin-error" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Dashboard ===== -->
+    <section class="screen" id="screen-dashboard">
+      <div class="container">
+        <div class="row between">
+          <div>
+            <div class="dash-greeting" id="greet-name">משפחת —</div>
+            <p class="dash-sub">היי! מה רוצים לעשות היום?</p>
+          </div>
+          <button class="btn primary" id="add-child-btn">➕ הוסף ילד</button>
+        </div>
+
+        <div class="summary">
+          <div class="stat green"><div class="label">סך הכנסות</div><div class="value" id="sum-deposits">0 ₪</div></div>
+          <div class="stat rose"><div class="label">סך הוצאות</div><div class="value" id="sum-withdrawals">0 ₪</div></div>
+          <div class="stat gold"><div class="label">סך כל היתרות</div><div class="value" id="sum-total">0 ₪</div></div>
+        </div>
+
+        <div class="section-h"><h2>הילדים שלי</h2></div>
+        <div id="children-area"></div>
+      </div>
+    </section>
+
+    <!-- ===== Child detail ===== -->
+    <section class="screen" id="screen-child">
+      <div class="container">
+        <div class="child-hero" id="child-hero"></div>
+
+        <div class="action-row">
+          <button class="btn success" id="add-deposit-btn">➕ הכנסה</button>
+          <button class="btn danger" id="add-withdrawal-btn">➖ הוצאה</button>
+          <button class="btn ghost" id="balance-at-date-btn">📅 יתרה לתאריך</button>
+          <button class="btn ghost" id="child-history-btn">📜 היסטוריה</button>
+        </div>
+
+        <div class="section-h"><h2>תנועות אחרונות</h2></div>
+        <div id="child-tx-area"></div>
+      </div>
+    </section>
+
+    <!-- ===== History (full) ===== -->
+    <section class="screen" id="screen-history">
+      <div class="container">
+        <div class="row between">
+          <div>
+            <div class="dash-greeting">היסטוריית תנועות</div>
+            <p class="dash-sub">סינון לפי תאריך, ילד, סוג וקטגוריה</p>
+          </div>
+        </div>
+
+        <div class="card flat" style="padding:14px;">
+          <div class="filter-row">
+            <div>
+              <label class="label">מתאריך</label>
+              <input type="date" class="input" id="filter-from" />
+            </div>
+            <div>
+              <label class="label">עד תאריך</label>
+              <input type="date" class="input" id="filter-to" />
+            </div>
+            <div>
+              <label class="label">ילד/ה</label>
+              <select class="select" id="filter-child"><option value="">הכל</option></select>
+            </div>
+            <div>
+              <label class="label">סוג</label>
+              <select class="select" id="filter-type">
+                <option value="">הכל</option>
+                <option value="deposit">הכנסות</option>
+                <option value="withdrawal">הוצאות</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">קטגוריה</label>
+              <select class="select" id="filter-category"><option value="">הכל</option></select>
+            </div>
+          </div>
+          <div class="row" style="gap:8px;">
+            <button class="btn primary sm" id="apply-filters">סנן</button>
+            <button class="btn ghost sm" id="clear-filters">נקה</button>
+          </div>
+        </div>
+
+        <div class="section-h"><h2>תוצאות</h2><span class="muted tiny" id="history-count">0 תנועות</span></div>
+        <div id="history-area"></div>
+      </div>
+    </section>
+
+    <!-- ===== Settings ===== -->
+    <section class="screen" id="screen-settings">
+      <div class="container">
+        <div class="dash-greeting">הגדרות</div>
+        <p class="dash-sub">ניהול קוד סודי, קטגוריות ופרטי משפחה</p>
+
+        <div class="card" style="margin-bottom:14px;">
+          <div class="section-h" style="margin-top:0;"><h2>פרטי משפחה</h2></div>
+          <div class="field">
+            <label class="label">שם משפחה</label>
+            <input class="input" id="settings-family-name" />
+          </div>
+          <div class="field">
+            <label class="label">סמל מטבע</label>
+            <input class="input" id="settings-currency" maxlength="3" />
+          </div>
+          <button class="btn primary" id="save-family-btn">שמור פרטי משפחה</button>
+        </div>
+
+        <div class="card" style="margin-bottom:14px;">
+          <div class="section-h" style="margin-top:0;"><h2>שינוי קוד סודי</h2></div>
+          <div class="field">
+            <label class="label">קוד נוכחי</label>
+            <input class="input" id="cur-pin" type="password" inputmode="numeric" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label class="label">קוד חדש (4-6 ספרות)</label>
+            <input class="input" id="new-pin" type="password" inputmode="numeric" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label class="label">אישור קוד חדש</label>
+            <input class="input" id="new-pin-2" type="password" inputmode="numeric" autocomplete="off" />
+          </div>
+          <button class="btn primary" id="change-pin-btn">עדכן קוד</button>
+        </div>
+
+        <div class="card">
+          <div class="section-h" style="margin-top:0;">
+            <h2>קטגוריות</h2>
+            <button class="btn sm primary" id="add-category-btn">➕ הוסף</button>
+          </div>
+          <div id="settings-cats-area"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>פותח על ידי <a href="https://lior-ai.com" target="_blank" rel="noopener">lior_Ai</a></div>
+    <div class="tiny" style="margin-top:6px;">© <span id="year"></span> · בנק הילדים · כלי חינוכי פיננסי</div>
+  </footer>
+</div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modal-bg" role="dialog" aria-modal="true">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- Floating buttons -->
+<a class="fab whatsapp" href="https://wa.me/972502094628?text=שלום%2C%20ראיתי%20את%20בנק%20הילדים%20של%20lior_Ai" target="_blank" rel="noopener" aria-label="WhatsApp ל-lior_Ai" title="WhatsApp ל-lior_Ai">💬</a>
+<button class="fab a11y" id="a11y-toggle" aria-label="פתח תפריט נגישות" title="נגישות">♿</button>
+
+<!-- Accessibility panel -->
+<div class="a11y-panel" id="a11y-panel" role="region" aria-label="תפריט נגישות">
+  <h3>הגדרות נגישות</h3>
+  <div class="a11y-grid" id="a11y-grid">
+    <button class="a11y-btn" data-a11y="a11y-large-text" aria-pressed="false"><span class="ico">🔍</span><span>הגדלת גופן</span></button>
+    <button class="a11y-btn" data-a11y="a11y-larger-text" aria-pressed="false"><span class="ico">🔎</span><span>גופן ענק</span></button>
+    <button class="a11y-btn" data-a11y="a11y-readable-font" aria-pressed="false"><span class="ico">📖</span><span>גופן קריא</span></button>
+    <button class="a11y-btn" data-a11y="a11y-high-contrast" aria-pressed="false"><span class="ico">🌓</span><span>ניגודיות גבוהה</span></button>
+    <button class="a11y-btn" data-a11y="a11y-negative" aria-pressed="false"><span class="ico">🌗</span><span>ניגודיות הפוכה</span></button>
+    <button class="a11y-btn" data-a11y="a11y-light" aria-pressed="false"><span class="ico">☀️</span><span>רקע בהיר</span></button>
+    <button class="a11y-btn" data-a11y="a11y-highlight-links" aria-pressed="false"><span class="ico">🔗</span><span>הדגשת קישורים</span></button>
+    <button class="a11y-btn" data-a11y="a11y-underline-links" aria-pressed="false"><span class="ico">📝</span><span>קו תחת קישור</span></button>
+    <button class="a11y-btn" data-a11y="a11y-highlight-headings" aria-pressed="false"><span class="ico">🏷️</span><span>הדגשת כותרות</span></button>
+    <button class="a11y-btn" data-a11y="a11y-grayscale" aria-pressed="false"><span class="ico">⚫</span><span>גווני אפור</span></button>
+    <button class="a11y-btn" data-a11y="a11y-no-anim" aria-pressed="false"><span class="ico">⏸️</span><span>עצור הנפשות</span></button>
+  </div>
+  <button class="btn block sm ghost" id="a11y-reset" style="margin-top:10px;">איפוס</button>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ============================================================
+   Kids Bank — Single-file vanilla JS app
+   Backend: Supabase REST (anon key) — security via family PIN
+   ============================================================ */
+(() => {
+'use strict';
+
+// -------------------- Config --------------------
+const SUPABASE_URL = 'https://evufisyrxfrwksequajt.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2dWZpc3lyeGZyd2tzZXF1YWp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTU2ODIsImV4cCI6MjA4NzEzMTY4Mn0.RenMVEQXkpVy6kA3z6enHy8hmyotUzviSMqCNoA2N7Q';
+
+const EMOJI_AVATARS = ['👦','👧','🧒','👶','👨','👩','🦸','🦸‍♀️','🦄','🐶','🐱','🐰','🦊','🐻','🐼','🐨','🦁','🐯','🐸','🐵','🐧','🦋','🌟','⚽','🎮','🎨','🎵','📚','🚀','🦖','🐉','🍎','🌈','🏆','🎯','💎'];
+const COLOR_PALETTE = ['#F59E0B','#10B981','#F43F5E','#3B82F6','#8B5CF6','#EC4899','#14B8A6','#F97316','#6366F1','#84CC16','#06B6D4','#EF4444'];
+
+const CATEGORY_ICONS = ['📦','💰','🎂','🎁','🧹','📚','🍬','🧸','🎮','📖','🏦','❤️','🍕','👕','✏️','🚲','🎬','🎪','⚽','🎨'];
+
+// -------------------- State --------------------
+const state = {
+  family: null,
+  children: [],
+  categories: [],
+  currentChildId: null,
+  currentScreen: 'pin',
+  pinInput: '',
+  pinMode: 'login',
+  filters: { from: '', to: '', child: '', type: '', category: '' },
+};
+
+// -------------------- DOM helpers --------------------
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const el = (tag, props = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const k in props) {
+    if (k === 'class') e.className = props[k];
+    else if (k === 'html') e.innerHTML = props[k];
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(), props[k]);
+    else if (k === 'style' && typeof props[k] === 'object') Object.assign(e.style, props[k]);
+    else if (k === 'dataset') Object.assign(e.dataset, props[k]);
+    else if (props[k] !== false && props[k] != null) e.setAttribute(k, props[k]);
+  }
+  for (const k of kids.flat()) {
+    if (k == null || k === false) continue;
+    e.appendChild(typeof k === 'string' ? document.createTextNode(k) : k);
+  }
+  return e;
+};
+const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// -------------------- Toast --------------------
+function toast(msg, type = '') {
+  const t = el('div', { class: 'toast ' + type }, msg);
+  $('#toast-wrap').appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; }, 2200);
+  setTimeout(() => t.remove(), 2700);
+}
+
+// -------------------- API --------------------
+async function api(method, path, body) {
+  const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    method,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!r.ok) {
+    const txt = await r.text().catch(() => '');
+    throw new Error('API ' + r.status + ': ' + txt);
+  }
+  if (r.status === 204) return null;
+  const txt = await r.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+async function rpc(fn, args) {
+  return api('POST', 'rpc/' + fn, args);
+}
+
+// -------------------- Money / formatting --------------------
+function fmtMoney(n) {
+  const c = state.family?.currency || '₪';
+  const num = Number(n) || 0;
+  return num.toLocaleString('he-IL', { maximumFractionDigits: 2 }) + ' ' + c;
+}
+function fmtDate(s) {
+  if (!s) return '';
+  const d = new Date(s);
+  return d.toLocaleDateString('he-IL');
+}
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+// -------------------- Auth --------------------
+async function doLogin(name, pin) {
+  const enc = encodeURIComponent;
+  const rows = await api('GET', 'families?family_name=eq.' + enc(name) + '&parent_pin=eq.' + enc(pin) + '&select=*');
+  if (!rows || !rows.length) throw new Error('שם משפחה או קוד שגויים');
+  return rows[0];
+}
+async function doSignup(name, pin) {
+  const enc = encodeURIComponent;
+  const existing = await api('GET', 'families?family_name=eq.' + enc(name) + '&select=id');
+  if (existing && existing.length) throw new Error('משפחה בשם זה כבר קיימת. נסי שם אחר או התחברי.');
+  const rows = await api('POST', 'families', { family_name: name, parent_pin: pin, currency: '₪' });
+  return rows[0];
+}
+async function loadFamily(id) {
+  const enc = encodeURIComponent;
+  const rows = await api('GET', 'families?id=eq.' + enc(id) + '&select=*');
+  return rows && rows[0];
+}
+
+// -------------------- Loaders --------------------
+async function loadChildren() {
+  const enc = encodeURIComponent;
+  state.children = await api('GET', 'children?family_id=eq.' + enc(state.family.id) + '&select=*&order=created_at.asc');
+}
+async function loadCategories() {
+  const enc = encodeURIComponent;
+  state.categories = await api('GET',
+    'categories?or=(family_id.is.null,family_id.eq.' + enc(state.family.id) + ')&select=*&order=type.asc,name.asc'
+  );
+}
+async function loadTransactions(childId, limit = 100) {
+  const enc = encodeURIComponent;
+  let path = 'transactions?family_id=eq.' + enc(state.family.id);
+  if (childId) path += '&child_id=eq.' + enc(childId);
+  path += '&select=*,categories(name,icon,color)&order=transaction_date.desc,created_at.desc&limit=' + limit;
+  return await api('GET', path);
+}
+async function loadFilteredTransactions(f) {
+  const enc = encodeURIComponent;
+  let path = 'transactions?family_id=eq.' + enc(state.family.id);
+  if (f.child) path += '&child_id=eq.' + enc(f.child);
+  if (f.type) path += '&type=eq.' + enc(f.type);
+  if (f.category) path += '&category_id=eq.' + enc(f.category);
+  if (f.from) path += '&transaction_date=gte.' + enc(f.from);
+  if (f.to) path += '&transaction_date=lte.' + enc(f.to);
+  path += '&select=*,categories(name,icon,color),children(name,avatar_emoji,color)&order=transaction_date.desc,created_at.desc&limit=500';
+  return await api('GET', path);
+}
+async function getChildBalance(childId) {
+  const r = await rpc('get_balance_at_date', { p_child_id: childId, p_date: todayISO() });
+  return Number(r) || 0;
+}
+async function getBalanceAt(childId, date) {
+  const r = await rpc('get_balance_at_date', { p_child_id: childId, p_date: date });
+  return Number(r) || 0;
+}
+
+// -------------------- Mutations --------------------
+async function createChild(data) {
+  await api('POST', 'children', { ...data, family_id: state.family.id });
+  await loadChildren();
+}
+async function updateChild(id, data) {
+  await api('PATCH', 'children?id=eq.' + encodeURIComponent(id), data);
+  await loadChildren();
+}
+async function deleteChild(id) {
+  await api('DELETE', 'children?id=eq.' + encodeURIComponent(id));
+  await loadChildren();
+}
+async function createTransaction(data) {
+  await api('POST', 'transactions', { ...data, family_id: state.family.id });
+}
+async function deleteTransaction(id) {
+  await api('DELETE', 'transactions?id=eq.' + encodeURIComponent(id));
+}
+async function createCategory(data) {
+  await api('POST', 'categories', { ...data, family_id: state.family.id });
+  await loadCategories();
+}
+async function deleteCategory(id) {
+  await api('DELETE', 'categories?id=eq.' + encodeURIComponent(id));
+  await loadCategories();
+}
+async function updateFamily(data) {
+  await api('PATCH', 'families?id=eq.' + encodeURIComponent(state.family.id), data);
+  state.family = { ...state.family, ...data };
+}
+
+// -------------------- Screen routing --------------------
+function showScreen(name) {
+  state.currentScreen = name;
+  $$('.screen').forEach((s) => s.classList.remove('active'));
+  const target = $('#screen-' + name);
+  if (target) target.classList.add('active');
+  // Topbar buttons
+  const inApp = name !== 'pin';
+  $('#settings-btn').style.display = inApp ? '' : 'none';
+  $('#history-btn').style.display = inApp ? '' : 'none';
+  $('#logout-btn').style.display = inApp ? '' : 'none';
+  $('#back-btn').style.display = (name === 'child' || name === 'history' || name === 'settings') ? '' : 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// -------------------- PIN screen --------------------
+function refreshPinDots() {
+  const dots = $$('#pin-dots .pin-dot');
+  dots.forEach((d, i) => d.classList.toggle('filled', i < state.pinInput.length));
+}
+function setPinError(msg) { $('#pin-error').textContent = msg || ''; }
+
+function setupPinScreen() {
+  $$('.pin-tab').forEach((t) => t.addEventListener('click', () => {
+    state.pinMode = t.dataset.mode;
+    $$('.pin-tab').forEach((x) => x.classList.remove('active'));
+    t.classList.add('active');
+    if (state.pinMode === 'signup') {
+      $('#pin-title').textContent = 'יצירת משפחה';
+      $('#pin-sub').textContent = 'בחרי שם משפחה וקוד סודי בן 4-6 ספרות';
+    } else {
+      $('#pin-title').textContent = 'ברוכים הבאים';
+      $('#pin-sub').textContent = 'הזינו שם משפחה וקוד סודי';
+    }
+    setPinError('');
+  }));
+
+  $$('#pin-pad .pin-key').forEach((k) => k.addEventListener('click', () => {
+    const d = k.dataset.d;
+    const a = k.dataset.act;
+    setPinError('');
+    if (d != null && state.pinInput.length < 6) {
+      state.pinInput += d;
+      refreshPinDots();
+    } else if (a === 'del') {
+      state.pinInput = state.pinInput.slice(0, -1);
+      refreshPinDots();
+    } else if (a === 'ok') {
+      onPinSubmit();
+    }
+  }));
+
+  // also support keyboard
+  document.addEventListener('keydown', (e) => {
+    if (state.currentScreen !== 'pin') return;
+    if (e.target.tagName === 'INPUT') return;
+    if (/^[0-9]$/.test(e.key) && state.pinInput.length < 6) {
+      state.pinInput += e.key; refreshPinDots();
+    } else if (e.key === 'Backspace') {
+      state.pinInput = state.pinInput.slice(0, -1); refreshPinDots();
+    } else if (e.key === 'Enter') {
+      onPinSubmit();
+    }
+  });
+
+  $('#family-name-input').addEventListener('input', () => setPinError(''));
+}
+
+async function onPinSubmit() {
+  const name = $('#family-name-input').value.trim();
+  const pin = state.pinInput;
+  if (!name) return setPinError('הזיני שם משפחה');
+  if (pin.length < 4) return setPinError('הקוד חייב להיות בן 4-6 ספרות');
+
+  $('#pin-ok-btn').disabled = true;
+  try {
+    let fam;
+    if (state.pinMode === 'login') {
+      fam = await doLogin(name, pin);
+    } else {
+      fam = await doSignup(name, pin);
+      toast('המשפחה נוצרה בהצלחה!', 'success');
+    }
+    state.family = fam;
+    sessionStorage.setItem('family_id', fam.id);
+    state.pinInput = ''; refreshPinDots();
+    $('#family-name-input').value = '';
+    await enterApp();
+  } catch (e) {
+    setPinError(e.message || 'שגיאה');
+    state.pinInput = ''; refreshPinDots();
+  } finally {
+    $('#pin-ok-btn').disabled = false;
+  }
+}
+
+// -------------------- Enter app --------------------
+async function enterApp() {
+  $('#brand-sub').textContent = 'משפחת ' + state.family.family_name;
+  await Promise.all([loadChildren(), loadCategories()]);
+  await renderDashboard();
+  showScreen('dashboard');
+}
+
+// -------------------- Dashboard --------------------
+async function renderDashboard() {
+  $('#greet-name').textContent = 'משפחת ' + state.family.family_name;
+
+  // Compute summary + per-child balances in one query
+  const enc = encodeURIComponent;
+  const allTx = await api('GET',
+    'transactions?family_id=eq.' + enc(state.family.id) + '&select=child_id,type,amount&limit=10000'
+  );
+  const sums = { deposit: 0, withdrawal: 0 };
+  const byChild = {};
+  (allTx || []).forEach((t) => {
+    const a = Number(t.amount) || 0;
+    sums[t.type] = (sums[t.type] || 0) + a;
+    byChild[t.child_id] = byChild[t.child_id] || 0;
+    byChild[t.child_id] += t.type === 'deposit' ? a : -a;
+  });
+  $('#sum-deposits').textContent = fmtMoney(sums.deposit);
+  $('#sum-withdrawals').textContent = fmtMoney(sums.withdrawal);
+  $('#sum-total').textContent = fmtMoney(sums.deposit - sums.withdrawal);
+
+  const area = $('#children-area');
+  area.innerHTML = '';
+
+  if (!state.children.length) {
+    area.appendChild(el('div', { class: 'empty' },
+      el('div', { class: 'big' }, '👶'),
+      el('div', {}, 'עוד אין ילדים במשפחה'),
+      el('div', { class: 'tiny', style: { marginTop: '6px' } }, 'הוסיפי את הילד הראשון כדי להתחיל')
+    ));
+    return;
+  }
+
+  const grid = el('div', { class: 'children-grid' });
+  state.children.forEach((c) => {
+    const bal = byChild[c.id] || 0;
+    const card = el('div', {
+      class: 'child-card',
+      style: { '--c': c.color || '#F59E0B' },
+      onclick: () => openChildDetail(c.id),
+    },
+      el('div', { class: 'child-head' },
+        el('div', { class: 'avatar', style: { '--c': c.color || '#F59E0B' } }, c.avatar_emoji || '👦'),
+        el('div', {},
+          el('h3', { class: 'child-name' }, c.name),
+          el('div', { class: 'tiny' }, c.weekly_allowance > 0 ? 'דמי כיס: ' + fmtMoney(c.weekly_allowance) + ' / שבוע' : 'הקש לפרטים')
+        )
+      ),
+      el('div', { class: 'balance-box' },
+        el('div', { class: 'balance-label' }, 'יתרה'),
+        el('div', { class: 'balance-value', style: { '--c': c.color || '#F59E0B' } }, fmtMoney(bal))
+      ),
+    );
+    grid.appendChild(card);
+  });
+  area.appendChild(grid);
+}
+
+// -------------------- Child detail --------------------
+async function openChildDetail(childId) {
+  state.currentChildId = childId;
+  showScreen('child');
+  await renderChildDetail();
+}
+
+async function renderChildDetail() {
+  const c = state.children.find((x) => x.id === state.currentChildId);
+  if (!c) return showScreen('dashboard');
+
+  const hero = $('#child-hero');
+  hero.innerHTML = '';
+  const balPlaceholder = el('span', { class: 'balance-value', style: { '--c': c.color } }, '...');
+  hero.appendChild(el('div', { class: 'avatar', style: { '--c': c.color, width: '72px', height: '72px', fontSize: '38px' } }, c.avatar_emoji));
+  hero.appendChild(el('div', { style: { flex: '1', minWidth: '0' } },
+    el('h2', { class: 'child-name', style: { fontSize: '22px' } }, c.name),
+    el('div', { class: 'tiny' }, 'הקישו על "ערוך" לעדכון פרטי הילד/ה')
+  ));
+  hero.appendChild(el('div', { style: { textAlign: 'left' } },
+    el('div', { class: 'balance-label' }, 'יתרה נוכחית'),
+    balPlaceholder
+  ));
+  hero.appendChild(el('button', { class: 'btn ghost sm', onclick: () => openEditChild(c) }, '✏️ ערוך'));
+  hero.appendChild(el('button', { class: 'btn ghost sm', onclick: () => confirmDeleteChild(c) }, '🗑️ מחק'));
+
+  const bal = await getChildBalance(c.id);
+  balPlaceholder.textContent = fmtMoney(bal);
+
+  const txs = await loadTransactions(c.id, 50);
+  const area = $('#child-tx-area');
+  area.innerHTML = '';
+  if (!txs || !txs.length) {
+    area.appendChild(el('div', { class: 'empty' },
+      el('div', { class: 'big' }, '📭'),
+      el('div', {}, 'עוד אין תנועות'),
+      el('div', { class: 'tiny', style: { marginTop: '6px' } }, 'הוסיפי הכנסה או הוצאה כדי להתחיל')
+    ));
+  } else {
+    area.appendChild(renderTxList(txs, false));
+  }
+}
+
+function renderTxList(txs, withChildName) {
+  const list = el('div', { class: 'tx-list' });
+  txs.forEach((t) => {
+    const isDep = t.type === 'deposit';
+    const cat = t.categories;
+    const child = t.children;
+    const ico = (cat && cat.icon) || (isDep ? '💵' : '🛒');
+    const item = el('div', { class: 'tx-item' },
+      el('div', { class: 'tx-icon ' + t.type }, ico),
+      el('div', { class: 'tx-body' },
+        el('div', { class: 'tx-desc' }, t.description),
+        el('div', { class: 'tx-meta' },
+          [(withChildName && child) ? (child.avatar_emoji + ' ' + child.name + ' · ') : '',
+           cat ? (cat.name + ' · ') : '',
+           fmtDate(t.transaction_date),
+           t.notes ? (' · ' + t.notes) : ''
+          ].join('')
+        )
+      ),
+      el('div', { class: 'tx-amount ' + t.type }, (isDep ? '+' : '−') + fmtMoney(t.amount)),
+      el('div', { class: 'tx-actions' },
+        el('button', {
+          class: 'tx-del-btn', title: 'מחק',
+          onclick: async () => {
+            if (!confirm('למחוק תנועה זו?')) return;
+            try {
+              await deleteTransaction(t.id);
+              toast('התנועה נמחקה', 'success');
+              if (state.currentScreen === 'child') renderChildDetail();
+              else if (state.currentScreen === 'history') runFilters();
+              else renderDashboard();
+            } catch (e) { toast('שגיאה במחיקה', 'error'); }
+          },
+        }, '×')
+      )
+    );
+    list.appendChild(item);
+  });
+  return list;
+}
+
+// -------------------- Modal --------------------
+function openModal(content) {
+  const m = $('#modal');
+  m.innerHTML = '';
+  if (typeof content === 'string') m.innerHTML = content;
+  else m.appendChild(content);
+  $('#modal-bg').classList.add('open');
+}
+function closeModal() { $('#modal-bg').classList.remove('open'); }
+
+function modalShell(title, body, footer) {
+  const root = el('div', {},
+    el('div', { class: 'modal-header' },
+      el('h2', { class: 'modal-title' }, title),
+      el('button', { class: 'close-btn', onclick: closeModal, 'aria-label': 'סגירה' }, '×')
+    ),
+    body,
+    footer ? el('div', { class: 'row', style: { marginTop: '14px', gap: '8px' } }, footer) : null
+  );
+  return root;
+}
+
+// -------------------- Add / Edit Child --------------------
+function openAddChild() { openChildForm(null); }
+function openEditChild(c) { openChildForm(c); }
+
+function openChildForm(existing) {
+  const isEdit = !!existing;
+  let selectedEmoji = existing?.avatar_emoji || '👦';
+  let selectedColor = existing?.color || '#F59E0B';
+
+  const nameInput = el('input', { class: 'input', placeholder: 'לדוגמה: דניאל', value: existing?.name || '' });
+  const allowanceInput = el('input', { class: 'input', type: 'number', step: '0.01', min: '0', placeholder: '0', value: existing?.weekly_allowance || '' });
+  const birthInput = el('input', { class: 'input', type: 'date', value: existing?.birthdate || '' });
+
+  const emojiGrid = el('div', { class: 'emoji-grid' });
+  EMOJI_AVATARS.forEach((e) => {
+    const b = el('button', {
+      type: 'button',
+      class: e === selectedEmoji ? 'selected' : '',
+      onclick: () => {
+        selectedEmoji = e;
+        $$('button', emojiGrid).forEach((x) => x.classList.remove('selected'));
+        b.classList.add('selected');
+      }
+    }, e);
+    emojiGrid.appendChild(b);
+  });
+
+  const colorGrid = el('div', { class: 'color-grid' });
+  COLOR_PALETTE.forEach((c) => {
+    const sw = el('div', {
+      class: 'color-swatch' + (c === selectedColor ? ' selected' : ''),
+      style: { background: c },
+      onclick: () => {
+        selectedColor = c;
+        $$('.color-swatch', colorGrid).forEach((x) => x.classList.remove('selected'));
+        sw.classList.add('selected');
+      }
+    });
+    colorGrid.appendChild(sw);
+  });
+
+  const body = el('div', {},
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'שם הילד/ה'), nameInput),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'אווטאר'), emojiGrid),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'צבע'), colorGrid),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'דמי כיס שבועיים (לא חובה)'), allowanceInput),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'תאריך לידה (לא חובה)'), birthInput)
+  );
+
+  const footer = [
+    el('button', { class: 'btn primary', style: { flex: '1' }, onclick: async () => {
+      const name = nameInput.value.trim();
+      if (!name) return toast('יש להזין שם', 'error');
+      const data = {
+        name,
+        avatar_emoji: selectedEmoji,
+        color: selectedColor,
+        weekly_allowance: parseFloat(allowanceInput.value) || 0,
+        birthdate: birthInput.value || null,
+      };
+      try {
+        if (isEdit) await updateChild(existing.id, data);
+        else await createChild(data);
+        toast(isEdit ? 'עודכן בהצלחה' : 'נוסף בהצלחה', 'success');
+        closeModal();
+        if (state.currentScreen === 'dashboard') renderDashboard();
+        else if (state.currentScreen === 'child') renderChildDetail();
+      } catch (e) { toast('שגיאה: ' + e.message, 'error'); }
+    } }, isEdit ? 'שמור' : 'הוסף ילד/ה'),
+    el('button', { class: 'btn ghost', onclick: closeModal }, 'ביטול')
+  ];
+
+  openModal(modalShell(isEdit ? 'עריכת ילד/ה' : 'הוספת ילד/ה', body, footer));
+}
+
+async function confirmDeleteChild(c) {
+  if (!confirm('למחוק את ' + c.name + ' ואת כל התנועות שלו/שלה? פעולה זו אינה הפיכה.')) return;
+  try {
+    await deleteChild(c.id);
+    toast('נמחק', 'success');
+    showScreen('dashboard');
+    renderDashboard();
+  } catch (e) { toast('שגיאה: ' + e.message, 'error'); }
+}
+
+// -------------------- Add Transaction --------------------
+function openAddTransaction(defaultType) {
+  let type = defaultType || 'deposit';
+  let categoryId = null;
+  let childId = state.currentChildId || (state.children[0] && state.children[0].id);
+
+  if (!state.children.length) {
+    return toast('הוסיפי קודם ילד/ה', 'error');
+  }
+
+  // Toggle
+  const toggle = el('div', { class: 'toggle-group' },
+    el('button', { type: 'button', class: 'toggle-opt', 'data-type': 'deposit', 'aria-pressed': type === 'deposit' }, '➕ הכנסה'),
+    el('button', { type: 'button', class: 'toggle-opt', 'data-type': 'withdrawal', 'aria-pressed': type === 'withdrawal' }, '➖ הוצאה')
+  );
+  // Child selector
+  const childSel = el('select', { class: 'select' });
+  state.children.forEach((c) => {
+    const o = el('option', { value: c.id }, c.avatar_emoji + ' ' + c.name);
+    if (c.id === childId) o.selected = true;
+    childSel.appendChild(o);
+  });
+  childSel.addEventListener('change', () => { childId = childSel.value; });
+
+  const amountInput = el('input', { class: 'amount-input', type: 'number', step: '0.01', min: '0.01', placeholder: '0', inputmode: 'decimal' });
+  const descInput = el('input', { class: 'input', placeholder: 'לדוגמה: דמי כיס שבועי' });
+  const dateInput = el('input', { class: 'input', type: 'date', value: todayISO() });
+  const notesInput = el('textarea', { class: 'input', placeholder: 'הערות (לא חובה)' });
+
+  const catGrid = el('div', { class: 'cat-grid' });
+  function rebuildCats() {
+    catGrid.innerHTML = '';
+    const filtered = state.categories.filter((c) => c.type === type);
+    if (!filtered.length) {
+      catGrid.appendChild(el('div', { class: 'tiny muted' }, 'אין קטגוריות. הוסיפי בהגדרות.'));
+      return;
+    }
+    filtered.forEach((c) => {
+      const b = el('button', {
+        type: 'button',
+        class: 'cat-btn' + (c.id === categoryId ? ' selected' : ''),
+        onclick: () => {
+          categoryId = c.id;
+          $$('.cat-btn', catGrid).forEach((x) => x.classList.remove('selected'));
+          b.classList.add('selected');
+        },
+      },
+        el('div', { class: 'ico' }, c.icon),
+        el('div', {}, c.name)
+      );
+      catGrid.appendChild(b);
+    });
+  }
+
+  $$('button', toggle).forEach((b) => b.addEventListener('click', () => {
+    type = b.dataset.type;
+    $$('button', toggle).forEach((x) => x.setAttribute('aria-pressed', x.dataset.type === type));
+    categoryId = null;
+    rebuildCats();
+    amountInput.style.color = type === 'deposit' ? 'var(--green)' : 'var(--rose)';
+  }));
+  amountInput.style.color = type === 'deposit' ? 'var(--green)' : 'var(--rose)';
+  rebuildCats();
+
+  const body = el('div', {},
+    toggle,
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'ילד/ה'), childSel),
+    el('div', { class: 'field' }, amountInput),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'תיאור (חובה)'), descInput),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'קטגוריה'), catGrid),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'תאריך'), dateInput),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'הערות'), notesInput)
+  );
+
+  const submit = el('button', { class: 'btn primary', style: { flex: '1' }, onclick: async () => {
+    const amount = parseFloat(amountInput.value);
+    const desc = descInput.value.trim();
+    if (!amount || amount <= 0) return toast('יש להזין סכום חיובי', 'error');
+    if (!desc) return toast('יש להזין תיאור', 'error');
+    if (!childId) return toast('יש לבחור ילד/ה', 'error');
+    submit.disabled = true;
+    try {
+      await createTransaction({
+        child_id: childId,
+        type,
+        amount,
+        description: desc,
+        category_id: categoryId,
+        notes: notesInput.value.trim() || null,
+        transaction_date: dateInput.value || todayISO(),
+      });
+      toast(type === 'deposit' ? 'הכנסה נוספה' : 'הוצאה נוספה', 'success');
+      closeModal();
+      if (state.currentScreen === 'child') renderChildDetail();
+      else if (state.currentScreen === 'history') runFilters();
+      else renderDashboard();
+    } catch (e) { toast('שגיאה: ' + e.message, 'error'); }
+    finally { submit.disabled = false; }
+  } }, 'שמור');
+
+  const footer = [submit, el('button', { class: 'btn ghost', onclick: closeModal }, 'ביטול')];
+  openModal(modalShell('תנועה חדשה', body, footer));
+  setTimeout(() => amountInput.focus(), 60);
+}
+
+// -------------------- Balance at date --------------------
+function openBalanceAtDate() {
+  if (!state.currentChildId) return;
+  const c = state.children.find((x) => x.id === state.currentChildId);
+  const dateInput = el('input', { class: 'input', type: 'date', value: todayISO() });
+  const result = el('div', {
+    class: 'card flat',
+    style: { textAlign: 'center', padding: '20px', marginTop: '14px', background: 'var(--bg-2)' }
+  },
+    el('div', { class: 'balance-label' }, 'יתרה לתאריך הנבחר'),
+    el('div', { class: 'balance-value', style: { fontSize: '34px', '--c': c.color } }, '...')
+  );
+
+  async function refresh() {
+    const v = result.querySelector('.balance-value');
+    v.textContent = '...';
+    try {
+      const bal = await getBalanceAt(c.id, dateInput.value);
+      v.textContent = fmtMoney(bal);
+    } catch (e) { v.textContent = 'שגיאה'; }
+  }
+  dateInput.addEventListener('change', refresh);
+  refresh();
+
+  const body = el('div', {},
+    el('div', { class: 'tiny muted', style: { marginBottom: '10px' } },
+      'בחרי תאריך כדי לראות מה הייתה היתרה של ' + c.name + ' ביום זה.'),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'תאריך'), dateInput),
+    result
+  );
+  const footer = [el('button', { class: 'btn primary block', onclick: closeModal }, 'סגור')];
+  openModal(modalShell('יתרה בתאריך היסטורי', body, footer));
+}
+
+// -------------------- Settings: family / pin / categories --------------------
+function renderSettings() {
+  $('#settings-family-name').value = state.family.family_name || '';
+  $('#settings-currency').value = state.family.currency || '₪';
+  $('#cur-pin').value = ''; $('#new-pin').value = ''; $('#new-pin-2').value = '';
+
+  const area = $('#settings-cats-area');
+  area.innerHTML = '';
+
+  const ownCats = state.categories.filter((c) => c.family_id);
+  const builtins = state.categories.filter((c) => !c.family_id);
+
+  const renderGroup = (title, list, deletable) => {
+    if (!list.length) return null;
+    const wrap = el('div', { style: { marginBottom: '10px' } },
+      el('div', { class: 'tiny muted', style: { marginBottom: '6px' } }, title)
+    );
+    list.forEach((c) => {
+      wrap.appendChild(el('div', { class: 'tx-item' },
+        el('div', { class: 'tx-icon ' + c.type, style: { background: c.color + '22', borderColor: c.color + '66', color: c.color } }, c.icon),
+        el('div', { class: 'tx-body' },
+          el('div', { class: 'tx-desc' }, c.name),
+          el('div', { class: 'tx-meta' }, c.type === 'deposit' ? 'הכנסה' : 'הוצאה')
+        ),
+        deletable ? el('button', {
+          class: 'tx-del-btn', title: 'מחק',
+          onclick: async () => {
+            if (!confirm('למחוק קטגוריה זו? תנועות קיימות לא יושפעו.')) return;
+            try {
+              await deleteCategory(c.id);
+              toast('נמחק', 'success');
+              renderSettings();
+            } catch (e) { toast('שגיאה במחיקה. ייתכן שהקטגוריה משויכת לתנועות.', 'error'); }
+          }
+        }, '×') : null
+      ));
+    });
+    return wrap;
+  };
+
+  const own = renderGroup('שלי (ניתן למחוק)', ownCats, true);
+  const builtin = renderGroup('מובנות', builtins, false);
+  if (own) area.appendChild(own);
+  if (builtin) area.appendChild(builtin);
+  if (!own && !builtin) area.appendChild(el('div', { class: 'empty' }, 'אין קטגוריות'));
+}
+
+function openAddCategory() {
+  let type = 'deposit';
+  let icon = '📦';
+  let color = '#10B981';
+
+  const nameInput = el('input', { class: 'input', placeholder: 'שם הקטגוריה' });
+  const toggle = el('div', { class: 'toggle-group' },
+    el('button', { type: 'button', class: 'toggle-opt', 'data-type': 'deposit', 'aria-pressed': true }, '➕ הכנסה'),
+    el('button', { type: 'button', class: 'toggle-opt', 'data-type': 'withdrawal', 'aria-pressed': false }, '➖ הוצאה')
+  );
+  $$('button', toggle).forEach((b) => b.addEventListener('click', () => {
+    type = b.dataset.type;
+    $$('button', toggle).forEach((x) => x.setAttribute('aria-pressed', x.dataset.type === type));
+  }));
+
+  const iconGrid = el('div', { class: 'emoji-grid' });
+  CATEGORY_ICONS.forEach((e) => {
+    const b = el('button', {
+      type: 'button',
+      class: e === icon ? 'selected' : '',
+      onclick: () => {
+        icon = e;
+        $$('button', iconGrid).forEach((x) => x.classList.remove('selected'));
+        b.classList.add('selected');
+      }
+    }, e);
+    iconGrid.appendChild(b);
+  });
+
+  const colorGrid = el('div', { class: 'color-grid' });
+  COLOR_PALETTE.forEach((c) => {
+    const sw = el('div', {
+      class: 'color-swatch' + (c === color ? ' selected' : ''),
+      style: { background: c },
+      onclick: () => {
+        color = c;
+        $$('.color-swatch', colorGrid).forEach((x) => x.classList.remove('selected'));
+        sw.classList.add('selected');
+      }
+    });
+    colorGrid.appendChild(sw);
+  });
+
+  const body = el('div', {},
+    toggle,
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'שם'), nameInput),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'אייקון'), iconGrid),
+    el('div', { class: 'field' }, el('label', { class: 'label' }, 'צבע'), colorGrid)
+  );
+  const footer = [
+    el('button', { class: 'btn primary', style: { flex: '1' }, onclick: async () => {
+      const name = nameInput.value.trim();
+      if (!name) return toast('יש להזין שם', 'error');
+      try {
+        await createCategory({ name, icon, color, type });
+        toast('נוסף', 'success');
+        closeModal();
+        renderSettings();
+      } catch (e) { toast('שגיאה: ' + e.message, 'error'); }
+    } }, 'הוסף'),
+    el('button', { class: 'btn ghost', onclick: closeModal }, 'ביטול')
+  ];
+  openModal(modalShell('קטגוריה חדשה', body, footer));
+}
+
+// -------------------- History screen --------------------
+function populateFilterSelects() {
+  const cs = $('#filter-child');
+  cs.innerHTML = '<option value="">הכל</option>';
+  state.children.forEach((c) => cs.appendChild(el('option', { value: c.id }, c.avatar_emoji + ' ' + c.name)));
+  const cat = $('#filter-category');
+  cat.innerHTML = '<option value="">הכל</option>';
+  state.categories.forEach((c) => cat.appendChild(el('option', { value: c.id }, c.icon + ' ' + c.name + ' (' + (c.type === 'deposit' ? 'הכנסה' : 'הוצאה') + ')')));
+}
+
+async function runFilters() {
+  const f = {
+    from: $('#filter-from').value,
+    to: $('#filter-to').value,
+    child: $('#filter-child').value,
+    type: $('#filter-type').value,
+    category: $('#filter-category').value,
+  };
+  const area = $('#history-area');
+  area.innerHTML = '<div class="spinner"></div>';
+  try {
+    const txs = await loadFilteredTransactions(f);
+    area.innerHTML = '';
+    $('#history-count').textContent = (txs.length || 0) + ' תנועות';
+    if (!txs.length) {
+      area.appendChild(el('div', { class: 'empty' },
+        el('div', { class: 'big' }, '🔍'),
+        el('div', {}, 'לא נמצאו תנועות'),
+        el('div', { class: 'tiny', style: { marginTop: '6px' } }, 'נסי לשנות את הסינון')
+      ));
+    } else {
+      area.appendChild(renderTxList(txs, true));
+    }
+  } catch (e) {
+    area.innerHTML = '';
+    toast('שגיאה: ' + e.message, 'error');
+  }
+}
+
+function clearFilters() {
+  $('#filter-from').value = '';
+  $('#filter-to').value = '';
+  $('#filter-child').value = '';
+  $('#filter-type').value = '';
+  $('#filter-category').value = '';
+  runFilters();
+}
+
+// -------------------- Accessibility --------------------
+function setupA11y() {
+  const stored = JSON.parse(localStorage.getItem('a11y') || '[]');
+  stored.forEach((cls) => document.documentElement.classList.add(cls));
+  const sync = () => {
+    const active = Array.from(document.documentElement.classList).filter((c) => c.startsWith('a11y-'));
+    localStorage.setItem('a11y', JSON.stringify(active));
+    $$('#a11y-grid .a11y-btn').forEach((b) => {
+      b.setAttribute('aria-pressed', document.documentElement.classList.contains(b.dataset.a11y));
+    });
+  };
+  sync();
+  $('#a11y-toggle').addEventListener('click', () => {
+    $('#a11y-panel').classList.toggle('open');
+  });
+  $$('#a11y-grid .a11y-btn').forEach((b) => b.addEventListener('click', () => {
+    const cls = b.dataset.a11y;
+    // Mutual exclusions
+    if (cls === 'a11y-large-text') document.documentElement.classList.remove('a11y-larger-text');
+    if (cls === 'a11y-larger-text') document.documentElement.classList.remove('a11y-large-text');
+    if (cls === 'a11y-high-contrast') document.documentElement.classList.remove('a11y-light', 'a11y-negative');
+    if (cls === 'a11y-light') document.documentElement.classList.remove('a11y-high-contrast', 'a11y-negative');
+    if (cls === 'a11y-negative') document.documentElement.classList.remove('a11y-high-contrast', 'a11y-light');
+    document.documentElement.classList.toggle(cls);
+    sync();
+  }));
+  $('#a11y-reset').addEventListener('click', () => {
+    Array.from(document.documentElement.classList).filter((c) => c.startsWith('a11y-')).forEach((c) => document.documentElement.classList.remove(c));
+    sync();
+  });
+}
+
+// -------------------- Wire up --------------------
+function wireTopbar() {
+  $('#back-btn').addEventListener('click', () => {
+    if (state.currentScreen === 'child') showScreen('dashboard');
+    else if (state.currentScreen === 'history') showScreen('dashboard');
+    else if (state.currentScreen === 'settings') showScreen('dashboard');
+  });
+  $('#settings-btn').addEventListener('click', () => { renderSettings(); showScreen('settings'); });
+  $('#history-btn').addEventListener('click', async () => {
+    populateFilterSelects();
+    showScreen('history');
+    await runFilters();
+  });
+  $('#logout-btn').addEventListener('click', () => {
+    if (!confirm('להתנתק?')) return;
+    sessionStorage.removeItem('family_id');
+    state.family = null;
+    state.children = [];
+    state.categories = [];
+    showScreen('pin');
+  });
+  $('#modal-bg').addEventListener('click', (e) => { if (e.target.id === 'modal-bg') closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+}
+
+function wireDashboard() {
+  $('#add-child-btn').addEventListener('click', openAddChild);
+}
+function wireChildScreen() {
+  $('#add-deposit-btn').addEventListener('click', () => openAddTransaction('deposit'));
+  $('#add-withdrawal-btn').addEventListener('click', () => openAddTransaction('withdrawal'));
+  $('#balance-at-date-btn').addEventListener('click', openBalanceAtDate);
+  $('#child-history-btn').addEventListener('click', async () => {
+    populateFilterSelects();
+    $('#filter-child').value = state.currentChildId;
+    showScreen('history');
+    await runFilters();
+  });
+}
+function wireHistoryScreen() {
+  $('#apply-filters').addEventListener('click', runFilters);
+  $('#clear-filters').addEventListener('click', clearFilters);
+}
+function wireSettings() {
+  $('#save-family-btn').addEventListener('click', async () => {
+    const name = $('#settings-family-name').value.trim();
+    const currency = ($('#settings-currency').value || '₪').slice(0, 3);
+    if (!name) return toast('שם משפחה לא יכול להיות ריק', 'error');
+    try {
+      await updateFamily({ family_name: name, currency });
+      toast('נשמר', 'success');
+      $('#brand-sub').textContent = 'משפחת ' + name;
+    } catch (e) { toast('שגיאה: ' + e.message, 'error'); }
+  });
+  $('#change-pin-btn').addEventListener('click', async () => {
+    const cur = $('#cur-pin').value.trim();
+    const np = $('#new-pin').value.trim();
+    const np2 = $('#new-pin-2').value.trim();
+    if (cur !== state.family.parent_pin) return toast('הקוד הנוכחי שגוי', 'error');
+    if (!/^\d{4,6}$/.test(np)) return toast('הקוד החדש חייב להיות 4-6 ספרות', 'error');
+    if (np !== np2) return toast('האישור אינו תואם', 'error');
+    try {
+      await updateFamily({ parent_pin: np });
+      toast('הקוד עודכן', 'success');
+      $('#cur-pin').value = ''; $('#new-pin').value = ''; $('#new-pin-2').value = '';
+    } catch (e) { toast('שגיאה: ' + e.message, 'error'); }
+  });
+  $('#add-category-btn').addEventListener('click', openAddCategory);
+}
+
+// -------------------- Init --------------------
+async function init() {
+  $('#year').textContent = new Date().getFullYear();
+  setupPinScreen();
+  setupA11y();
+  wireTopbar();
+  wireDashboard();
+  wireChildScreen();
+  wireHistoryScreen();
+  wireSettings();
+
+  // close a11y panel on outside click
+  document.addEventListener('click', (e) => {
+    const panel = $('#a11y-panel');
+    if (!panel.classList.contains('open')) return;
+    if (e.target.closest('#a11y-panel') || e.target.closest('#a11y-toggle')) return;
+    panel.classList.remove('open');
+  });
+
+  const fid = sessionStorage.getItem('family_id');
+  if (fid) {
+    try {
+      const fam = await loadFamily(fid);
+      if (fam) {
+        state.family = fam;
+        await enterApp();
+        return;
+      }
+    } catch (e) { /* fall through to PIN screen */ }
+    sessionStorage.removeItem('family_id');
+  }
+  showScreen('pin');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
