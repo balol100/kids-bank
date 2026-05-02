@@ -1,0 +1,18 @@
+{
+  "name": "בנק הילדים",
+  "short_name": "בנק הילדים",
+  "description": "ניהול חיסכון, דמי כיס והוצאות לכל ילד במשפחה",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "icons": [
+    { "src": "/icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon.png", "sizes": "any", "type": "image/png", "purpose": "maskable" }
+  ]
+}
