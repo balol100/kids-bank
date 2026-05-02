@@ -679,10 +679,10 @@ body.kid-mode .kid-hide { display: none !important; }
           </div>
           <div class="pin-error" id="pin-error" aria-live="polite"></div>
 
-          <div id="kid-login-section" class="hidden">
+          <div id="kid-login-section">
             <div class="pin-divider">או</div>
             <button class="btn block" id="kid-login-btn">👦👧 כניסה לילד/ה</button>
-            <div class="tiny muted" style="margin-top:8px;">צפייה בלבד · ללא קוד סודי</div>
+            <div class="tiny muted" style="margin-top:8px;">הזיני שם משפחה למעלה ולחצי כאן · צפייה בלבד · ללא קוד סודי</div>
           </div>
         </div>
       </div>
@@ -1176,30 +1176,45 @@ async function enterApp() {
 
 // -------------------- Kid mode --------------------
 function updateKidLoginVisibility() {
-  const has = !!localStorage.getItem(FAMILY_LS_KEY);
-  $('#kid-login-section').classList.toggle('hidden', !has);
+  // Kid login is always available; a child can sign in alone by typing
+  // the family name (no PIN). Cached family ID just enables a fast path.
+  $('#kid-login-section').classList.remove('hidden');
+}
+
+async function loadFamilyByName(name) {
+  const enc = encodeURIComponent;
+  const rows = await api('GET', 'families?family_name=eq.' + enc(name) + '&select=*');
+  return rows && rows[0];
 }
 
 async function startKidLogin() {
-  const fid = localStorage.getItem(FAMILY_LS_KEY);
-  if (!fid) {
-    setPinError('הורה צריך/ה להתחבר תחילה');
-    return;
-  }
   setPinError('');
   $('#kid-login-btn').disabled = true;
   try {
-    const fam = await loadFamily(fid);
+    let fam = null;
+    const fid = localStorage.getItem(FAMILY_LS_KEY);
+    if (fid) {
+      fam = await loadFamily(fid);
+      if (!fam) localStorage.removeItem(FAMILY_LS_KEY);
+    }
     if (!fam) {
-      localStorage.removeItem(FAMILY_LS_KEY);
-      updateKidLoginVisibility();
-      setPinError('המשפחה לא נמצאה. בקש/י מההורה להתחבר תחילה');
-      return;
+      const name = $('#family-name-input').value.trim();
+      if (!name) {
+        setPinError('הזיני שם משפחה כדי להיכנס');
+        return;
+      }
+      fam = await loadFamilyByName(name);
+      if (!fam) {
+        setPinError('משפחה לא נמצאה');
+        return;
+      }
     }
     state.family = fam;
     state.kidMode = true;
     document.body.classList.add('kid-mode');
     $('#brand-sub').textContent = 'משפחת ' + fam.family_name;
+    $('#family-name-input').value = '';
+    state.pinInput = ''; refreshPinDots();
     await Promise.all([loadChildren(), loadCategories()]);
     await renderKidPicker();
     showScreen('kid-picker');
