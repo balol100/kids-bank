@@ -461,42 +461,6 @@ textarea.input { min-height: 80px; resize: vertical; }
   margin-bottom: 14px;
 }
 
-/* Floating buttons */
-.fab {
-  position: fixed; z-index: 40;
-  width: 56px; height: 56px; border-radius: 50%;
-  display: grid; place-items: center;
-  cursor: pointer; transition: var(--t);
-  box-shadow: 0 14px 30px rgba(0,0,0,.4);
-  border: 0; color: white; font-size: 24px;
-}
-.fab:hover { transform: translateY(-2px); }
-.fab.whatsapp { left: 16px; bottom: 16px; background: #25D366; }
-.fab.a11y { left: 16px; bottom: 84px; background: linear-gradient(135deg, var(--purple), #A78BFA); }
-
-/* Accessibility panel */
-.a11y-panel {
-  position: fixed; left: 16px; bottom: 84px; z-index: 41;
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: 18px; padding: 16px;
-  width: 300px; max-width: calc(100vw - 32px);
-  box-shadow: 0 30px 60px rgba(0,0,0,.5);
-  transform: translateY(20px); opacity: 0; pointer-events: none;
-  transition: var(--t);
-}
-.a11y-panel.open { transform: none; opacity: 1; pointer-events: auto; }
-.a11y-panel h3 { margin: 0 0 12px; font-size: 16px; }
-.a11y-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.a11y-btn {
-  background: var(--bg-2); border: 1px solid var(--line); color: var(--text);
-  padding: 8px 6px; border-radius: 10px; cursor: pointer;
-  font-family: inherit; font-size: 12px; font-weight: 600;
-  transition: var(--t); display: flex; flex-direction: column; align-items: center; gap: 2px;
-}
-.a11y-btn .ico { font-size: 18px; }
-.a11y-btn:hover { background: var(--card-2); }
-.a11y-btn[aria-pressed="true"] { background: var(--gold); color: #111; border-color: transparent; }
-
 /* Footer */
 .footer {
   text-align: center; padding: 24px 16px;
@@ -528,37 +492,6 @@ textarea.input { min-height: 80px; resize: vertical; }
   margin: 24px auto;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* Accessibility classes (Israeli Std 5568) */
-html.a11y-large-text { font-size: 18px; }
-html.a11y-larger-text { font-size: 22px; }
-html.a11y-readable-font, html.a11y-readable-font * { font-family: Arial, 'Heebo', sans-serif !important; }
-html.a11y-high-contrast { background: #000 !important; }
-html.a11y-high-contrast body { background: #000 !important; color: #FFF !important; }
-html.a11y-high-contrast .card, html.a11y-high-contrast .child-card,
-html.a11y-high-contrast .topbar, html.a11y-high-contrast .pin-card,
-html.a11y-high-contrast .modal { background: #000 !important; border-color: #FFF !important; }
-html.a11y-high-contrast .input, html.a11y-high-contrast .select,
-html.a11y-high-contrast textarea.input { background: #000 !important; color: #FFF !important; border-color: #FFF !important; }
-html.a11y-negative { filter: invert(1) hue-rotate(180deg); }
-html.a11y-light { background: #F8FAFC !important; }
-html.a11y-light body { background: #F8FAFC !important; color: #0F172A !important; }
-html.a11y-light .card, html.a11y-light .child-card,
-html.a11y-light .topbar, html.a11y-light .pin-card,
-html.a11y-light .modal { background: #FFF !important; border-color: #CBD5E1 !important; color: #0F172A !important; }
-html.a11y-light .input, html.a11y-light .select,
-html.a11y-light textarea.input { background: #FFF !important; color: #0F172A !important; border-color: #CBD5E1 !important; }
-html.a11y-light .muted, html.a11y-light .tx-meta,
-html.a11y-light .label, html.a11y-light .pin-sub { color: #475569 !important; }
-html.a11y-highlight-links a, html.a11y-highlight-links button { outline: 2px dashed var(--gold) !important; outline-offset: 2px; }
-html.a11y-underline-links a { text-decoration: underline !important; }
-html.a11y-highlight-headings h1, html.a11y-highlight-headings h2,
-html.a11y-highlight-headings h3, html.a11y-highlight-headings .pin-title,
-html.a11y-highlight-headings .modal-title { background: var(--gold) !important; color: #111 !important; padding: 2px 6px !important; border-radius: 6px !important; }
-html.a11y-grayscale { filter: grayscale(1); }
-html.a11y-no-anim *, html.a11y-no-anim *::before, html.a11y-no-anim *::after {
-  animation: none !important; transition: none !important;
-}
 
 /* Kid mode */
 .kid-banner {
@@ -845,29 +778,6 @@ body.kid-mode .kid-hide { display: none !important; }
 <!-- Modal -->
 <div class="modal-bg" id="modal-bg" role="dialog" aria-modal="true">
   <div class="modal" id="modal"></div>
-</div>
-
-<!-- Floating buttons -->
-<a class="fab whatsapp" href="https://wa.me/972502094628?text=שלום%2C%20ראיתי%20את%20בנק%20הילדים%20של%20lior_Ai" target="_blank" rel="noopener" aria-label="WhatsApp ל-lior_Ai" title="WhatsApp ל-lior_Ai">💬</a>
-<button class="fab a11y" id="a11y-toggle" aria-label="פתח תפריט נגישות" title="נגישות">♿</button>
-
-<!-- Accessibility panel -->
-<div class="a11y-panel" id="a11y-panel" role="region" aria-label="תפריט נגישות">
-  <h3>הגדרות נגישות</h3>
-  <div class="a11y-grid" id="a11y-grid">
-    <button class="a11y-btn" data-a11y="a11y-large-text" aria-pressed="false"><span class="ico">🔍</span><span>הגדלת גופן</span></button>
-    <button class="a11y-btn" data-a11y="a11y-larger-text" aria-pressed="false"><span class="ico">🔎</span><span>גופן ענק</span></button>
-    <button class="a11y-btn" data-a11y="a11y-readable-font" aria-pressed="false"><span class="ico">📖</span><span>גופן קריא</span></button>
-    <button class="a11y-btn" data-a11y="a11y-high-contrast" aria-pressed="false"><span class="ico">🌓</span><span>ניגודיות גבוהה</span></button>
-    <button class="a11y-btn" data-a11y="a11y-negative" aria-pressed="false"><span class="ico">🌗</span><span>ניגודיות הפוכה</span></button>
-    <button class="a11y-btn" data-a11y="a11y-light" aria-pressed="false"><span class="ico">☀️</span><span>רקע בהיר</span></button>
-    <button class="a11y-btn" data-a11y="a11y-highlight-links" aria-pressed="false"><span class="ico">🔗</span><span>הדגשת קישורים</span></button>
-    <button class="a11y-btn" data-a11y="a11y-underline-links" aria-pressed="false"><span class="ico">📝</span><span>קו תחת קישור</span></button>
-    <button class="a11y-btn" data-a11y="a11y-highlight-headings" aria-pressed="false"><span class="ico">🏷️</span><span>הדגשת כותרות</span></button>
-    <button class="a11y-btn" data-a11y="a11y-grayscale" aria-pressed="false"><span class="ico">⚫</span><span>גווני אפור</span></button>
-    <button class="a11y-btn" data-a11y="a11y-no-anim" aria-pressed="false"><span class="ico">⏸️</span><span>עצור הנפשות</span></button>
-  </div>
-  <button class="btn block sm ghost" id="a11y-reset" style="margin-top:10px;">איפוס</button>
 </div>
 
 <div class="toast-wrap" id="toast-wrap"></div>
@@ -1901,38 +1811,6 @@ function clearFilters() {
   runFilters();
 }
 
-// -------------------- Accessibility --------------------
-function setupA11y() {
-  const stored = JSON.parse(localStorage.getItem('a11y') || '[]');
-  stored.forEach((cls) => document.documentElement.classList.add(cls));
-  const sync = () => {
-    const active = Array.from(document.documentElement.classList).filter((c) => c.startsWith('a11y-'));
-    localStorage.setItem('a11y', JSON.stringify(active));
-    $$('#a11y-grid .a11y-btn').forEach((b) => {
-      b.setAttribute('aria-pressed', document.documentElement.classList.contains(b.dataset.a11y));
-    });
-  };
-  sync();
-  $('#a11y-toggle').addEventListener('click', () => {
-    $('#a11y-panel').classList.toggle('open');
-  });
-  $$('#a11y-grid .a11y-btn').forEach((b) => b.addEventListener('click', () => {
-    const cls = b.dataset.a11y;
-    // Mutual exclusions
-    if (cls === 'a11y-large-text') document.documentElement.classList.remove('a11y-larger-text');
-    if (cls === 'a11y-larger-text') document.documentElement.classList.remove('a11y-large-text');
-    if (cls === 'a11y-high-contrast') document.documentElement.classList.remove('a11y-light', 'a11y-negative');
-    if (cls === 'a11y-light') document.documentElement.classList.remove('a11y-high-contrast', 'a11y-negative');
-    if (cls === 'a11y-negative') document.documentElement.classList.remove('a11y-high-contrast', 'a11y-light');
-    document.documentElement.classList.toggle(cls);
-    sync();
-  }));
-  $('#a11y-reset').addEventListener('click', () => {
-    Array.from(document.documentElement.classList).filter((c) => c.startsWith('a11y-')).forEach((c) => document.documentElement.classList.remove(c));
-    sync();
-  });
-}
-
 // -------------------- Wire up --------------------
 function wireTopbar() {
   $('#back-btn').addEventListener('click', async () => {
@@ -2015,20 +1893,11 @@ function wireSettings() {
 async function init() {
   $('#year').textContent = new Date().getFullYear();
   setupPinScreen();
-  setupA11y();
   wireTopbar();
   wireDashboard();
   wireChildScreen();
   wireHistoryScreen();
   wireSettings();
-
-  // close a11y panel on outside click
-  document.addEventListener('click', (e) => {
-    const panel = $('#a11y-panel');
-    if (!panel.classList.contains('open')) return;
-    if (e.target.closest('#a11y-panel') || e.target.closest('#a11y-toggle')) return;
-    panel.classList.remove('open');
-  });
 
   updateKidLoginVisibility();
 
